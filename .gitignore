@@ -1,0 +1,10 @@
+# Visual Studio Code
+.vscode/
+.history/
+
+*# Local environment files
+.env
+
+#bin,obj
+bin/
+obj/
