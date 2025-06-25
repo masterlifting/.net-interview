@@ -7,9 +7,9 @@ public class AlgorithmsTests
     [InlineData("one,\"two,with,comma\",three", new string[] { "one", "two,with,comma", "three" })]
     [InlineData("\"a,b\"", new string[] { "a,b" })]
     [InlineData("", new string[0])]
-    public void ParseCsv(string input, string[] assertion)
+    public void ParseCsv(string input, string[] expected)
     {
         var result = Algorithms.ParseCsv(input);
-        Assert.Equal(result, assertion);
+        Assert.Equal(expected, result);
     }
 }
