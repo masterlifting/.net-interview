@@ -54,4 +54,35 @@ public static class Algorithms
 
         return results.ToArray();
     }
+
+    public static int FirstUniqueCharacterInString(string input)
+    {
+        var results = new Dictionary<char, (int, int)>();
+
+        for (var i = 0; i < input.Length; i++)
+        {
+            if (results.TryGetValue(input[i], out var v))
+            {
+                results[input[i]] = (i, ++v.Item2);
+            }
+            else
+            {
+                results[input[i]] = (i,1);
+            }
+        }
+
+
+        var result = -1;
+
+        foreach (var (_, (index, count)) in results.OrderBy(x => x.Value.Item1))
+        {
+            if (count == 1)
+            {
+                result = index;
+                break;
+            }
+        }
+
+        return result;
+    }
 }

@@ -12,4 +12,16 @@ public class AlgorithmsTests
     var result = Algorithms.ParseCsv(input);
     Assert.Equal(expected, result);
   }
-}
+
+  [Theory]
+  [InlineData("leetcode", 0)]
+  [InlineData("loveleetcode", 2)]
+  [InlineData("aabb", -1)]
+  [InlineData("a", 0)]
+  [InlineData("zxyz", 1)]
+  public void FirstUniqueCharacterInString(string input, int expected)
+  {
+    var result = Algorithms.FirstUniqueCharacterInString(input);
+    Assert.Equal(expected, result);
+  } 
+} 
