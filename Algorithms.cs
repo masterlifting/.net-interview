@@ -5,47 +5,49 @@ public static class Algorithms
     public static string[] ParseCsv(string input)
     {
         var results = new LinkedList<string>();
-
         var span = input.AsSpan();
 
         while (span.Length > 0)
         {
-            var startIndex = span.IndexOf("\"", StringComparison.Ordinal);
+            var commaIndex = span.IndexOf(',');
+            var quotaStartIndex = span.IndexOf('"');
 
-            if (startIndex == -1)
+            if (commaIndex == -1 && quotaStartIndex == -1)
             {
-                startIndex = span.IndexOf(",", StringComparison.Ordinal);
-
-                if (startIndex == -1)
-                {
-                    results.AddLast(span.ToString());
-                    span = [];
-                }
-                else
-                {
-                    results.AddLast(span[..startIndex].ToString());
-                    span = span[(startIndex + 1)..];
-                }
+                results.AddLast(span.ToString());
+                span = [];
             }
-            else
+            else if (commaIndex > -1 && (commaIndex < quotaStartIndex || quotaStartIndex == -1))
             {
-                var endIndex = span[(startIndex + 1)..].IndexOf("\"", StringComparison.Ordinal);
-
-                if (endIndex == -1)
+                if (commaIndex > 0)
                 {
-                    results.Clear();
-                    break;
+                    results.AddLast(span[..commaIndex].ToString());
                 }
-                else
+
+                span = span.Length > (commaIndex + 1)
+                    ? span[(commaIndex + 1)..]
+                    : [];
+            }
+            else if (quotaStartIndex > -1 && quotaStartIndex < commaIndex)
+            {
+                span = span.Length > (quotaStartIndex + 1)
+                    ? span[(quotaStartIndex + 1)..]
+                    : [];
+
+                var lenghtResult = span.IndexOf('"');
+
+                if (lenghtResult > 0)
                 {
-                    var result = span[..startIndex];
-                    result = result[^1] == ',' ? result[..^1] : result;
-                    result = result[0] == ',' ? result[1..] : result;
+                    results.AddLast(span[..lenghtResult].ToString());
+                }
 
-                    results.AddLast(result.ToString());
-                    results.AddLast(span[startIndex..endIndex].ToString());
+                span = span.Length > (lenghtResult + 1)
+                    ? span[(lenghtResult + 1)..]
+                    : span[lenghtResult..];
 
-                    span = span[(endIndex + 1)..];
+                if (span[0] == ',' || span[0] == '"')
+                {
+                    span = span.Length > 1 ? span[1..] : [];
                 }
             }
         }
