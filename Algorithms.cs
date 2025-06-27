@@ -57,29 +57,55 @@ public static class Algorithms
 
     public static int FirstUniqueCharacterInString(string input)
     {
-        var results = new Dictionary<char, (int, int)>();
+        var storage = new Dictionary<char, (int, int)>();
 
         for (var i = 0; i < input.Length; i++)
         {
-            if (results.TryGetValue(input[i], out var v))
+            if (storage.TryGetValue(input[i], out var v))
             {
-                results[input[i]] = (i, ++v.Item2);
+                storage[input[i]] = (i, ++v.Item2);
             }
             else
             {
-                results[input[i]] = (i,1);
+                storage[input[i]] = (i, 1);
             }
         }
 
 
         var result = -1;
 
-        foreach (var (_, (index, count)) in results.OrderBy(x => x.Value.Item1))
+        foreach (var (_, (index, count)) in storage.OrderBy(x => x.Value.Item1))
         {
             if (count == 1)
             {
                 result = index;
                 break;
+            }
+        }
+
+        return result;
+    }
+
+    public static int LongestConsecutiveSequence(int[] input)
+    {
+        var result = input.Length == 0 ? 0 : 1;
+        var orderedInput = input.Order().ToArray();
+
+        for (int i = 1; i < orderedInput.Length; i++)
+        {
+            var previous = orderedInput[i - 1];
+            var current = orderedInput[i];
+
+            if (previous != current)
+            {
+                if (previous + 1 == current)
+                {
+                    result++;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
 
