@@ -36,4 +36,47 @@ public class AlgorithmsTests
     var result = Algorithms.LongestConsecutiveSequence(input);
     Assert.Equal(expected, result);
   }
+
+  [Theory]
+  [InlineData(new int[] { 3, 2, 1 }, 1)]
+  [InlineData(new int[] { 1, 2 }, 2)]
+  [InlineData(new int[] { 2, 2, 3, 1 }, 1)]
+  [InlineData(new int[] { 1, 2, 2 }, 2)]
+  [InlineData(new int[] { 5, 2, 2 }, 5)]
+  [InlineData(new int[] { 1, 2, -2, 3 }, 1)]
+  public void ThirdMax(int[] input, int expected)
+  {
+    var result = Algorithms.ThirdMax(input);
+    Assert.Equal(expected, result);
+  }
+
+  [Theory]
+  [InlineData(new char[] { 'h', 'e', 'l', 'l', 'o' }, new char[] { 'o', 'l', 'l', 'e', 'h' })]
+  [InlineData(new char[] { 'H', 'a', 'n', 'n', 'a', 'h' }, new char[] { 'h', 'a', 'n', 'n', 'a', 'H' })]
+  public void ReverseString(char[] input, char[] expected)
+  {
+    Algorithms.ReverseString(input);
+    Assert.Equal(expected, input);
+  }
+
+  [Theory]
+  [InlineData("racecar", true)]
+  [InlineData("hello", false)]
+  [InlineData("A man, a plan, a canal: Panama", true)]
+  [InlineData("No 'x' in Nixon", true)]
+  public void IsPalindrome(string input, bool expected)
+  {
+    var result = Algorithms.IsPalindrome(input);
+    Assert.Equal(expected, result);
+  }
+
+  [Theory]
+  [InlineData(234, 15)]
+  [InlineData(4421, 21)]
+  [InlineData(123456, 699)]
+  public void SubtractProductAndSum(int n, int expected)
+  {
+    var result = Algorithms.SubtractProductAndSum(n);
+    Assert.Equal(expected, result);
+  }
 }

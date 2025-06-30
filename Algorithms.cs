@@ -111,4 +111,116 @@ public static class Algorithms
 
         return result;
     }
+
+    public static int ThirdMax(int[] nums)
+    {
+        var results = new int?[] { null, null, null };
+
+        for (var i = 0; i < nums.Length; i++)
+        {
+            var num = nums[i];
+
+            if (!results[0].HasValue || num > results[0].Value)
+            {
+                if (!results[1].HasValue || num > results[1].Value)
+                {
+                    if (!results[2].HasValue || num > results[2].Value)
+                    {
+                        results[0] = results[1];
+                        results[1] = results[2];
+                        results[2] = num;
+                    }
+                    else if (results[2].Value != num)
+                    {
+                        results[0] = results[1];
+                        results[1] = num;
+                    }
+                }
+                else if (results[1].Value != num)
+                {
+                    results[0] = num;
+                }
+            }
+        }
+
+        return results[0].HasValue
+            ? results[0].Value
+            : results[2].HasValue
+                ? results[2].Value
+                : 0;
+    }
+
+    public static char[] ReverseString(char[] s)
+    {
+        var l = 0;
+        var r = s.Length - 1;
+
+        while (l < r)
+        {
+            var t = s[l];
+            s[l] = s[r];
+            s[r] = t;
+            l++;
+            r--;
+        }
+
+        Console.WriteLine(s);
+
+        return s;
+    }
+
+    public static bool IsPalindrome(string s)
+    {
+        var l = 0;
+        var r = s.Length - 1;
+
+        while (l < r)
+        {
+            var left = s[l];
+            if (char.IsAsciiLetterOrDigit(left))
+            {
+                var right = s[r];
+                if (char.IsAsciiLetterOrDigit(right))
+                {
+                    if (char.ToLower(left) != char.ToLower(right))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        l++;
+                        r--;
+                    }
+                }
+                else
+                {
+                    r--;
+                }
+            }
+            else
+            {
+                l++;
+            }
+        }
+
+        return true;
+    }
+
+    public static int SubtractProductAndSum(int n)
+    {
+        var sum = 0;
+        var product = 1;
+
+        while (n > 0)
+        {
+            var lastDigit = n % 10;
+
+            sum += lastDigit;
+            product *= lastDigit;
+
+            n /= 10;
+        }
+
+        return product - sum;
+    }
 }
