@@ -79,4 +79,19 @@ public class AlgorithmsTests
     var result = Algorithms.SubtractProductAndSum(n);
     Assert.Equal(expected, result);
   }
+
+  [Theory]
+  [InlineData(0, 0, 2, 4, 120)]
+  public void SumMatrix(int row1, int col1, int row2, int col2, int expected)
+  {
+    int[][] matrix =
+    [
+      [1, 2, 3, 4, 5],
+      [6, 7, 8, 9, 10],
+      [11, 12, 13, 14, 15]
+    ];
+
+    var result = Algorithms.SumMatrix(matrix, row1, col1, row2, col2);
+    Assert.Equal(expected, result);
+  }
 }

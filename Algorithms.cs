@@ -223,4 +223,31 @@ public static class Algorithms
 
         return product - sum;
     }
+
+    public static int SumMatrix(int[][] matrix, int row1, int col1, int row2, int col2)
+    {
+        var prefixMatrix = new int[matrix.Length][];
+
+        for (var i = 0; i < matrix.Length; i++)
+        {
+            var cells = new int[matrix[i].Length + 1];
+            cells[0] = 0;
+
+            for (var j = 1; j < cells.Length; j++)
+            {
+                cells[j] = matrix[i][j - 1] + cells[j - 1];
+            }
+
+            prefixMatrix[i] = cells;
+        }
+
+        var result = 0;
+
+        for (var i = row1; i <= row2; i++)
+        {
+            result += prefixMatrix[i][col2 + 1] - prefixMatrix[i][col1];
+        }
+
+        return result;
+    }
 }
