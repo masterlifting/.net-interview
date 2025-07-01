@@ -317,7 +317,7 @@ public static class Algorithms
             var current = orderedIntervals[i];
 
             // overlaping
-            if (previous.Start <= current.End && previous.End >= current.Start)
+            if (previous.Start <= current.End && current.Start <= previous.End)
             {
                 mergedIntervals.Remove(previous);
                 var start = Math.Min(previous.Start, current.Start);
