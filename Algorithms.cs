@@ -301,12 +301,6 @@ public static class Algorithms
 
     public static int[][] MergeIntervals(int[][] intervals)
     {
-        
-        var intervalsList = intervals
-            .Select(x => new Interval(x[0], x[1]))
-            .Order()
-            .ToArray();
-        
         var orderedIntervals = intervals
             .Select(x => new Interval(x[0], x[1]))
             .Order()
