@@ -94,4 +94,43 @@ public class AlgorithmsTests
     var result = Algorithms.SumMatrix(matrix, row1, col1, row2, col2);
     Assert.Equal(expected, result);
   }
+
+  [Theory]
+  [InlineData("", "", true)]
+  [InlineData("a", "a", true)]
+  [InlineData("a", "b", false)]
+  [InlineData("abc", "cba", true)]
+  [InlineData("rat", "car", false)]
+  [InlineData("aa", "bb", false)]
+  [InlineData("aa", "aabb", false)]
+  [InlineData("aa", "bbbb", false)]
+  [InlineData("a", "aa", false)]
+  public void IsAnagram(string s, string t, bool expected)
+  {
+    var result = Algorithms.IsAnagram(s, t);
+    Assert.Equal(expected, result);
+  }
+
+
+  [Fact]
+  public void MergeIntervals()
+  {
+    int[][] intervals =
+    [
+      [1, 3],
+      [2, 6],
+      [8, 10],
+      [15, 18]
+    ];
+
+    int[][] expected =
+    [
+      [1, 6],
+      [8, 10],
+      [15, 18]
+    ];
+
+    var result = Algorithms.MergeIntervals(intervals);
+    Assert.Equal(expected, result);
+  }
 }

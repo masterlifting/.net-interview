@@ -250,4 +250,85 @@ public static class Algorithms
 
         return result;
     }
+
+    public static bool IsAnagram(string s, string t)
+    {
+        var dict = new Dictionary<char, uint>(s.Length + t.Length);
+
+        for (var i = 0; i < s.Length; i++)
+        {
+            if (!dict.TryGetValue(s[i], out uint value))
+            {
+                dict[s[i]] = 1;
+            }
+            else
+            {
+                dict[s[i]] = ++value;
+            }
+        }
+
+        for (var i = 0; i < t.Length; i++)
+        {
+            if (!dict.TryGetValue(t[i], out uint value))
+            {
+                return false;
+            }
+            else
+            {
+                dict[t[i]] = --value;
+            }
+        }
+
+        return dict.All(x => x.Value == 0);
+    }
+
+    private class Interval : IComparable<Interval>
+    {
+        public int Start { get; }
+        public int End { get; }
+
+        public Interval(int start, int end)
+        {
+            Start = start;
+            End = end;
+        }
+
+        public int CompareTo(Interval? other)
+        {
+            return Start - other?.Start ?? 0;
+        }
+    }
+
+    public static int[][] MergeIntervals(int[][] intervals)
+    {
+        
+        var intervalsList = intervals
+            .Select(x => new Interval(x[0], x[1]))
+            .Order()
+            .ToArray();
+        
+        var orderedIntervals = intervals
+            .Select(x => new Interval(x[0], x[1]))
+            .Order()
+            .ToArray();
+        
+        var mergedIntervals = new List<Interval>();
+        var lastInterval = orderedIntervals[0];
+        for(var i = 1; i < orderedIntervals.Length; i++)
+        {
+            var curentInterval = orderedIntervals[i];
+            
+            // overlaping
+            if(lastInterval.Start <= curentInterval.End && lastInterval.End >= curentInterval.Start )
+            {
+
+            }
+            else
+            {
+                mergedIntervals.Add()
+            }
+        }
+
+        return new int[0][];
+    }
 }
