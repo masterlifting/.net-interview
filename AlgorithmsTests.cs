@@ -112,23 +112,91 @@ public class AlgorithmsTests
   }
 
 
-  [Fact]
-  public void MergeIntervals()
+  [Theory]
+  [InlineData("Basic")]
+  [InlineData("NonOverlapping")]
+  [InlineData("AllOverlapping")]
+  [InlineData("UnsortedInput")]
+  [InlineData("AdjacentIntervals")]
+  public void MergeIntervals(string testCase)
   {
-    int[][] intervals =
-    [
-      [1, 3],
-      [2, 6],
-      [8, 10],
-      [15, 18]
-    ];
+    int[][] intervals;
+    int[][] expected;
 
-    int[][] expected =
-    [
-      [1, 6],
-      [8, 10],
-      [15, 18]
-    ];
+    switch (testCase)
+    {
+      case "Basic":
+        intervals =
+        [
+          [1, 3],
+          [2, 6],
+          [8, 10],
+          [15, 18]
+        ];
+        expected =
+        [
+          [1, 6],
+          [8, 10],
+          [15, 18]
+        ];
+        break;
+      case "NonOverlapping":
+        intervals =
+        [
+          [1, 2],
+          [3, 4],
+          [5, 6]
+        ];
+        expected =
+        [
+          [1, 2],
+          [3, 4],
+          [5, 6]
+        ];
+        break;
+      case "AllOverlapping":
+        intervals =
+        [
+          [1, 10],
+          [2, 9],
+          [3, 8],
+          [4, 7]
+        ];
+        expected =
+        [
+          [1, 10]
+        ];
+        break;
+      case "UnsortedInput":
+        intervals =
+        [
+          [15, 18],
+          [2, 6],
+          [1, 3],
+          [8, 10]
+        ];
+        expected =
+        [
+          [1, 6],
+          [8, 10],
+          [15, 18]
+        ];
+        break;
+      case "AdjacentIntervals":
+        intervals =
+        [
+          [1, 3],
+          [3, 6],
+          [6, 10]
+        ];
+        expected =
+        [
+          [1, 10]
+        ];
+        break;
+      default:
+        throw new ArgumentException($"Unknown test case: {testCase}");
+    }
 
     var result = Algorithms.MergeIntervals(intervals);
     Assert.Equal(expected, result);

@@ -305,24 +305,31 @@ public static class Algorithms
             .Select(x => new Interval(x[0], x[1]))
             .Order()
             .ToArray();
-        
-        var mergedIntervals = new List<Interval>();
-        var lastInterval = orderedIntervals[0];
-        for(var i = 1; i < orderedIntervals.Length; i++)
-        {
-            var curentInterval = orderedIntervals[i];
-            
-            // overlaping
-            if(lastInterval.Start <= curentInterval.End && lastInterval.End >= curentInterval.Start )
-            {
 
+        var mergedIntervals = new List<Interval>
+        {
+          orderedIntervals[0]
+        };
+
+        for (var i = 1; i < orderedIntervals.Length; i++)
+        {
+            var previous = mergedIntervals.Last();
+            var current = orderedIntervals[i];
+
+            // overlaping
+            if (previous.Start <= current.End && previous.End >= current.Start)
+            {
+                mergedIntervals.Remove(previous);
+                var start = Math.Min(previous.Start, current.Start);
+                var end = Math.Max(previous.End, current.End);
+                mergedIntervals.Add(new Interval(start, end));
             }
             else
             {
-                mergedIntervals.Add()
+                mergedIntervals.Add(current);
             }
         }
 
-        return new int[0][];
+        return mergedIntervals.Select(x => new int[] { x.Start, x.End }).ToArray();
     }
 }
