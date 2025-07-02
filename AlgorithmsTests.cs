@@ -201,4 +201,45 @@ public class AlgorithmsTests
     var result = Algorithms.MergeIntervals(intervals);
     Assert.Equal(expected, result);
   }
+
+  [Theory]
+  [InlineData(new int[] { 2, 7, 11, 15 }, 9, new int[] { 0, 1 })]
+  [InlineData(new int[] { 3, 2, 4 }, 6, new int[] { 1, 2 })]
+  [InlineData(new int[] { 3, 3 }, 6, new int[] { 0, 1 })]
+  [InlineData(new int[] { -3, 4, 3, 90 }, 0, new int[] { 0, 2 })]
+  [InlineData(new int[] { 1, 2, 3, 4, 5 }, 9, new int[] { 3, 4 })]
+  [InlineData(new int[] { 1, 2, 3, 4, 5 }, 10, new int[] { })] // No solution
+  public void TwoSum(int[] nums, int target, int[] expected)
+  {
+    var result = Algorithms.TwoSum(nums, target);
+    Assert.Equal(expected, result);
+  }
+
+  [Theory]
+  [InlineData(new string[] { "eat", "tea", "tan", "ate", "nat", "bat" },
+              new string[] { "eat,tea,ate", "tan,nat", "bat" })]
+  [InlineData(new string[] { "listen", "silent", "enlist", "inlets", "google" },
+              new string[] { "listen,silent,enlist,inlets", "google" })]
+  [InlineData(new string[] { "abc", "bca", "cab", "xyz", "zyx" },
+              new string[] { "abc,bca,cab", "xyz,zyx" })]
+  [InlineData(new string[] { "a", "b", "c" },
+              new string[] { "a", "b", "c" })]
+  public void GroupAnagrams(string[] strs, string[] expectedGroups)
+  {
+    var result = Algorithms.GroupAnagrams(strs);
+
+    // Convert string representation to expected format
+    var expected = expectedGroups
+        .Select(g => g.Split(',').ToList() as IList<string>)
+        .ToList();
+
+    // Check that each expected group is in the result
+    Assert.Equal(expected.Count, result.Count);
+    foreach (var expectedGroup in expected)
+    {
+      Assert.Contains(result, resultGroup =>
+          expectedGroup.Count == resultGroup.Count &&
+          expectedGroup.All(word => resultGroup.Contains(word)));
+    }
+  }
 }

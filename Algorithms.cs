@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace LiveCoding;
 
 public static class Algorithms
@@ -331,5 +333,48 @@ public static class Algorithms
         }
 
         return mergedIntervals.Select(x => new int[] { x.Start, x.End }).ToArray();
+    }
+
+    public static int[] TwoSum(int[] nums, int target)
+    {
+        var dict = new Dictionary<int, int>(nums.Length);
+
+        for (var i = 0; i < nums.Length; i++)
+        {
+            var v = target - nums[i];
+
+            if (dict.ContainsKey(v))
+            {
+                return [dict[v], i];
+            }
+            else
+            {
+                dict.TryAdd(nums[i], i);
+            }
+        }
+
+        return [];
+    }
+    
+    public static IList<IList<string>> GroupAnagrams(string[] strs) {
+        var cache = new Dictionary<string,IList<string>>();
+
+        for(var i = 0; i < strs.Length; i++)
+        {
+            var str = strs[i];
+            var orderedStr = string.Join("",str.Order());
+
+            if(cache.TryGetValue(orderedStr, out var list))
+            {
+                list.Add(str);
+                cache[orderedStr] = list;
+            }
+            else
+            {
+                cache[orderedStr] = new List<string>{ str };
+            }
+        }
+
+        return cache.Values.ToList();
     }
 }
