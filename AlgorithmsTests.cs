@@ -242,4 +242,18 @@ public class AlgorithmsTests
           expectedGroup.All(word => resultGroup.Contains(word)));
     }
   }
+
+  [Theory]
+  [InlineData("ab#c", "ad#c", true)]
+  [InlineData("ab##", "c#d#", true)]
+  [InlineData("a##c", "#a#c", true)]
+  [InlineData("a#b#c", "c", true)]
+  [InlineData("a#b#c", "a#b#c", true)]
+  [InlineData("a#b#c", "b#c", true)]
+  [InlineData("xywrrmp", "xywrrm#p", false)]
+  public void BackspaceCompare(string s, string t, bool expected)
+  {
+    var result = Algorithms.BackspaceCompare(s, t);
+    Assert.Equal(expected, result);
+  }
 }

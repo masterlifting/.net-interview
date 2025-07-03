@@ -355,26 +355,89 @@ public static class Algorithms
 
         return [];
     }
-    
-    public static IList<IList<string>> GroupAnagrams(string[] strs) {
-        var cache = new Dictionary<string,IList<string>>();
 
-        for(var i = 0; i < strs.Length; i++)
+    public static IList<IList<string>> GroupAnagrams(string[] strs)
+    {
+        var cache = new Dictionary<string, IList<string>>();
+
+        for (var i = 0; i < strs.Length; i++)
         {
             var str = strs[i];
-            var orderedStr = string.Join("",str.Order());
+            var orderedStr = string.Join("", str.Order());
 
-            if(cache.TryGetValue(orderedStr, out var list))
+            if (cache.TryGetValue(orderedStr, out var list))
             {
                 list.Add(str);
                 cache[orderedStr] = list;
             }
             else
             {
-                cache[orderedStr] = new List<string>{ str };
+                cache[orderedStr] = new List<string> { str };
             }
         }
 
         return cache.Values.ToList();
+    }
+
+    public static bool BackspaceCompare(string s, string t)
+    {
+        var sStack = new Stack<char>(s.Length);
+        var tStack = new Stack<char>(t.Length);
+
+        for (var i = 0; i < s.Length; i++)
+        {
+            var v = s[i];
+
+            if (sStack.TryPeek(out var sv))
+            {
+                if (sv == '#')
+                {
+                    _ = sStack.TryPop(out _);
+                    _ = sStack.TryPop(out _);
+                }
+
+                if (v == '#')
+                {
+                    _ = sStack.TryPop(out _);
+                }
+                else
+                {
+                    sStack.Push(v);
+                }
+            }
+            else
+            {
+                sStack.Push(v);
+            }
+        }
+
+        for (var i = 0; i < t.Length; i++)
+        {
+            var v = t[i];
+
+            if (tStack.TryPeek(out var sv))
+            {
+                if (sv == '#')
+                {
+                    _ = tStack.TryPop(out _);
+                    _ = tStack.TryPop(out _);
+                }
+
+                if (v == '#')
+                {
+                    _ = tStack.TryPop(out _);
+                }
+                else
+                {
+                    tStack.Push(v);
+                }
+            }
+            else
+            {
+                tStack.Push(v);
+            }
+        }
+
+        return string.Join("", sStack) == string.Join("", tStack);
     }
 }
