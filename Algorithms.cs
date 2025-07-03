@@ -388,48 +388,29 @@ public static class Algorithms
         {
             var v = s[i];
 
-            if (sStack.TryPeek(out var sv))
+            if (v == '#')
             {
-                if (sv == '#')
+                if (sStack.Any())
                 {
-                    _ = sStack.TryPop(out _);
-                    _ = sStack.TryPop(out _);
-                }
-
-                if (v == '#')
-                {
-                    _ = sStack.TryPop(out _);
-                }
-                else
-                {
-                    sStack.Push(v);
+                    sStack.Pop();
                 }
             }
             else
             {
                 sStack.Push(v);
             }
+
         }
 
         for (var i = 0; i < t.Length; i++)
         {
             var v = t[i];
 
-            if (tStack.TryPeek(out var sv))
+            if (v == '#')
             {
-                if (sv == '#')
+                if (tStack.Any())
                 {
-                    _ = tStack.TryPop(out _);
-                    _ = tStack.TryPop(out _);
-                }
-
-                if (v == '#')
-                {
-                    _ = tStack.TryPop(out _);
-                }
-                else
-                {
-                    tStack.Push(v);
+                    tStack.Pop();
                 }
             }
             else
@@ -438,6 +419,6 @@ public static class Algorithms
             }
         }
 
-        return string.Join("", sStack) == string.Join("", tStack);
+        return sStack.SequenceEqual(tStack);
     }
 }
