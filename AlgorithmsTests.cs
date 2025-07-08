@@ -1,3 +1,5 @@
+using static LiveCoding.Algorithms;
+
 namespace LiveCoding;
 
 public class AlgorithmsTests
@@ -255,5 +257,41 @@ public class AlgorithmsTests
   {
     var result = Algorithms.BackspaceCompare(s, t);
     Assert.Equal(expected, result);
+  }
+
+  [Theory]
+  [InlineData(new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 }, new int[] { 1, 2, 3, 4, 5, 6 })]
+  [InlineData(new int[] { 1, 3, 5 }, new int[] { 2, 4, 6 }, new int[] { 1, 2, 3, 4, 5, 6 })]
+  [InlineData(new int[] { 1, 2, 3 }, new int[] { }, new int[] { 1, 2, 3 })]
+  public void MergeTwoSortedLists(int[] l1, int[] l2, int[] expected)
+  {
+    static ListNode? ToList (int[] values)
+    {
+      return values.Length switch
+      {
+        0 => null,
+        1 => new ListNode(values[0]),
+        _ => new ListNode(values[0], ToList(values[1..])),
+      };
+    }
+
+    static int[] FromList(ListNode? node)
+    {
+      var result = new List<int>();
+
+      while (node != null)
+      {
+        result.Add(node.Val);
+        node = node.Next;
+      }
+
+      return [.. result];
+    }
+
+    var list1 = ToList(l1);
+    var list2 = ToList(l2);
+
+    var result = Algorithms.MergeTwoSortedLists(list1, list2);
+    Assert.Equal(expected, FromList(result));
   }
 }

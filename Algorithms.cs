@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace LiveCoding;
 
 public static class Algorithms
@@ -157,9 +159,7 @@ public static class Algorithms
 
         while (l < r)
         {
-            var t = s[l];
-            s[l] = s[r];
-            s[r] = t;
+            (s[r], s[l]) = (s[l], s[r]);
             l++;
             r--;
         }
@@ -419,4 +419,53 @@ public static class Algorithms
 
         return sStack.SequenceEqual(tStack);
     }
+
+    public class ListNode
+    {
+        public int Val { get; set; }
+        public ListNode? Next { get; set; }
+
+        public ListNode(int val = 0, ListNode? next = null)
+        {
+            Val = val;
+            Next = next;
+        }
+    }
+
+    public static ListNode? MergeTwoSortedLists(ListNode? list1, ListNode? list2)
+    {
+        if (list1 == null) return list2;
+        if (list2 == null) return list1;
+
+        static ListNode? Merge(ListNode? l1, ListNode? l2)
+        {
+            if (l1 == null)
+            {
+                return l2;
+            }
+
+            if (l2 == null)
+            {
+                return l1;
+            }
+
+            ListNode? result;
+
+            if (l1.Val < l2.Val)
+            {
+                result = new ListNode(l1.Val);
+                result.Next = Merge(l1.Next, l2);
+            }
+            else
+            {
+                result = new ListNode(l2.Val);
+                result.Next = Merge(l2.Next, l1);
+            }
+
+            return result;
+        }
+
+        return Merge(list1, list2);
+    }
+
 }
