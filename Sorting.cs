@@ -10,23 +10,19 @@ public static class Sorting
     static int Partition(T[] data, int left, int right)
     {
       var pivot = data[right];
-      right--;
+      int i = left - 1;
 
-      while (left <= right)
+      for (int j = left; j < right; j++)
       {
-        while (left <= right && data[left].CompareTo(pivot) < 0)
-          left++;
-
-        while (left <= right && data[right].CompareTo(pivot) > 0)
-          right--;
-
-        if (left < right)
-          (data[left], data[right]) = (data[right], data[left]);
-
+        if (data[j].CompareTo(pivot) <= 0)
+        {
+          i++;
+          (data[i], data[j]) = (data[j], data[i]);
+        }
       }
-
-      (data[left], data[right + 1]) = (data[right + 1], data[left]);
-      return left;
+      
+      (data[i + 1], data[right]) = (data[right], data[i + 1]);
+      return i + 1;
     }
 
     static void SortRecursively(T[] data, int left, int right)
@@ -43,66 +39,55 @@ public static class Sorting
     SortRecursively(data, 0, data.Length - 1);
   }
 
-  public static void MergeSort<T>(ref T[] data) where T : IComparable<T>
+  public static void MergeSort<T>(T[] data) where T : IComparable<T>
   {
     if (data.Length < 2)
       return;
-
-    void Merge(ref T[] data, int left, int mid, int right)
+      
+    // Create a temporary array for merging
+    T[] temp = new T[data.Length];
+    MergeSortInternal(data, 0, data.Length - 1, temp);
+  }
+  
+  private static void MergeSortInternal<T>(T[] data, int left, int right, T[] temp) where T : IComparable<T>
+  {
+    if (left < right)
     {
-      var leftArray = data[left..mid];
-      var rightArray = data[(mid + 1)..right];
-
-      int l = 0, r = 0, writeIndex = left;
-
-      while (l < leftArray.Length && r < rightArray.Length)
-      {
-        if (leftArray[l].CompareTo(rightArray[r]) <= 0)
-        {
-          data[writeIndex] = leftArray[l];
-          l++;
-        }
-        else
-        {
-          data[writeIndex] = rightArray[r];
-          r++;
-        }
-        writeIndex++;
-      }
-
-      if (l < leftArray.Length)
-      {
-        while (l < leftArray.Length)
-        {
-          data[writeIndex] = leftArray[l];
-          l++;
-          writeIndex++;
-        }
-      }
-      else if (r < rightArray.Length)
-      {
-        while (r < rightArray.Length)
-        {
-          data[writeIndex] = rightArray[r];
-          r++;
-          writeIndex++;
-        }
-      }
+      int mid = left + (right - left) / 2; // Prevents overflow for large arrays
+      
+      MergeSortInternal(data, left, mid, temp);
+      MergeSortInternal(data, mid + 1, right, temp);
+      
+      Merge(data, left, mid, right, temp);
     }
-
-    void SortRecursively(ref T[] data, int left, int right)
+  }
+  
+  private static void Merge<T>(T[] data, int left, int mid, int right, T[] temp) where T : IComparable<T>
+  {
+    // Copy both halves to temp array
+    Array.Copy(data, left, temp, left, right - left + 1);
+    
+    int l = left;      // Initial index of first subarray
+    int r = mid + 1;   // Initial index of second subarray
+    int i = left;      // Initial index of merged array
+    
+    while (l <= mid && r <= right)
     {
-      if (left >= right)
-        return;
-
-      var mid = (left + right) / 2;
-
-      SortRecursively(ref data, left, mid);
-      SortRecursively(ref data, mid + 1, right);
-
-      Merge(ref data, left, mid, right);
+      if (temp[l].CompareTo(temp[r]) <= 0)
+      {
+        data[i] = temp[l++];
+      }
+      else
+      {
+        data[i] = temp[r++];
+      }
+      i++;
     }
-
-    SortRecursively(ref data, 0, data.Length - 1);
+    
+    while (l <= mid)
+    {
+      data[i++] = temp[l++];
+    }
+    
   }
 }
