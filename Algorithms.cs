@@ -1,4 +1,4 @@
-namespace LiveCoding;
+    namespace LiveCoding;
 
 public static class Algorithms
 {
