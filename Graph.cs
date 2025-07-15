@@ -18,16 +18,33 @@ public sealed class Graph<T> where T : IComparable<T>
 
   public IEnumerable<Vertex> GetConnected_DFS()
   {
+    static IEnumerable<Vertex> GetConnectedRecursively(Vertex vertex, HashSet<Vertex> visited)
+    {
+      visited.Add(vertex);
+
+      yield return vertex;
+
+      foreach (var v in vertex.Vertices)
+      {
+        if (!visited.Contains(v))
+        {
+          foreach (var connected in GetConnectedRecursively(v, visited))
+          {
+            yield return connected;
+          }
+        }
+      }
+    }
+
     var visited = new HashSet<Vertex>();
 
     foreach (var vertex in _vertices)
     {
       if (!visited.Contains(vertex))
       {
-        foreach (var connected in vertex.GetConnected_DFS())
+        foreach (var connected in GetConnectedRecursively(vertex, visited))
         {
           yield return connected;
-          visited.Add(connected);
         }
       }
     }
@@ -70,13 +87,13 @@ public sealed class Graph<T> where T : IComparable<T>
 
     public void Connect(Vertex vertex)
     {
-      var fod = Vertices.FirstOrDefault(v => v.Value.Equals(vertex.Value));
-
-      if (fod is not null)
+      if (Vertices.Any(v => v.Value.Equals(vertex.Value)))
         return;
 
       Vertices.Add(vertex);
-      vertex.Connect(this);
+
+      if (!vertex.Vertices.Any(v => v.Value.Equals(this.Value)))
+        vertex.Vertices.Add(this);
     }
 
     public IEnumerable<Vertex> GetConnected_DFS()
