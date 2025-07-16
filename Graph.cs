@@ -1,4 +1,4 @@
-namespace AlghorithmStrutures;
+namespace Algorithm;
 
 public sealed class Graph<T> where T : IComparable<T>
 {

@@ -1,0 +1,54 @@
+namespace Algorithm;
+
+public class LRUCache<K, V>(int capacity) where K : notnull
+{
+    private readonly int _capacity = capacity;
+    private readonly Dictionary<K, LinkedListNode<CacheItem<K, V>>> cache = [];
+    private readonly LinkedList<CacheItem<K, V>> list = new();
+
+    public V? Get(K key)
+    {
+        if (cache.TryGetValue(key, out var node))
+        {
+            var value = node.Value.Value;
+            list.Remove(node);
+            list.AddLast(node);
+            return value;
+        }
+
+        return default;
+    }
+
+    public void Set(K key, V val)
+    {
+        if (cache.TryGetValue(key, out var existingNode))
+        {
+            list.Remove(existingNode);
+        }
+        else if (cache.Count >= _capacity)
+        {
+            RemoveFirst();
+        }
+
+        CacheItem<K, V> cacheItem = new(key, val);
+        LinkedListNode<CacheItem<K, V>> node = new(cacheItem);
+
+        list.AddLast(node);
+        cache[key] = node;
+    }
+
+    private void RemoveFirst()
+    {
+        if (list.First is null)
+            throw new InvalidOperationException("Cache is empty, cannot remove item.");
+
+        var node = list.First;
+
+        // Remove from LRUPriority
+        list.RemoveFirst();
+        // Remove from cache
+        cache.Remove(node.Value.Key);
+    }
+}
+
+record CacheItem<K, V>(K Key, V Value);

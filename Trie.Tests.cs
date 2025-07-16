@@ -1,4 +1,4 @@
-namespace AlghorithmStrutures.Tests;
+namespace Algorithm.Tests;
 
 public sealed class TrieTests
 {

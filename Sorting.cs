@@ -1,4 +1,4 @@
-namespace AlghorithmStrutures;
+namespace Algorithm;
 
 public static class Sorting
 {
