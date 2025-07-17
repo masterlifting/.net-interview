@@ -3,8 +3,8 @@ namespace Algorithm;
 public class LRUCache<K, V>(int capacity) where K : notnull
 {
     private readonly int _capacity = capacity;
-    private readonly Dictionary<K, LinkedListNode<CacheItem<K, V>>> cache = [];
-    private readonly LinkedList<CacheItem<K, V>> list = new();
+    private readonly Dictionary<K, LinkedListNode<CacheItem>> cache = [];
+    private readonly LinkedList<CacheItem> list = new();
 
     public V? Get(K key)
     {
@@ -30,8 +30,8 @@ public class LRUCache<K, V>(int capacity) where K : notnull
             RemoveFirst();
         }
 
-        CacheItem<K, V> cacheItem = new(key, val);
-        LinkedListNode<CacheItem<K, V>> node = new(cacheItem);
+        CacheItem cacheItem = new(key, val);
+        LinkedListNode<CacheItem> node = new(cacheItem);
 
         list.AddLast(node);
         cache[key] = node;
@@ -49,6 +49,6 @@ public class LRUCache<K, V>(int capacity) where K : notnull
         // Remove from cache
         cache.Remove(node.Value.Key);
     }
-}
 
-record CacheItem<K, V>(K Key, V Value);
+    record CacheItem(K Key, V Value);
+}
