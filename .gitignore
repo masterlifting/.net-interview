@@ -1,8 +1,9 @@
 # Visual Studio Code
+.vs/
 .vscode/
 .history/
 
-*# Local environment files
+# Local environment files
 .env
 
 #bin,obj
