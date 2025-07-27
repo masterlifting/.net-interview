@@ -2,120 +2,77 @@ namespace Algorithm;
 
 public sealed class Trie
 {
-  private Node _root = new('\0');
+  private Node root = new('\0');
 
   public void Add(string word)
   {
-    if (string.IsNullOrEmpty(word))
-      throw new ArgumentException("Word cannot be null or empty.", nameof(word));
+    if (word.Length == 0)
+      return;
 
-    static void AddRecursivelly(ref Node node, string word)
+    var current = root;
+
+    foreach (var c in word)
     {
-      if (string.IsNullOrEmpty(word))
-      {
-        node.IsComplete = true;
-        return;
-      }
-      else
-      {
-        var firstChar = word[0];
+      if (!current.Edges.ContainsKey(c))
+        current.Edges[c] = new(c);
 
-        if (node.Children.TryGetValue(firstChar, out var child))
-        {
-          AddRecursivelly(ref child, word[1..]);
-        }
-        else
-        {
-          child = new Node(firstChar);
-          node.Children[firstChar] = child;
-          AddRecursivelly(ref child, word[1..]);
-        }
-      }
+      current = current.Edges[c];
     }
 
-    AddRecursivelly(ref _root, word);
-  }
-
-  private Node? GetNode(string word)
-  {
-    static Node? GetNodeRecursively(Node node, string word)
-    {
-      if (string.IsNullOrEmpty(word))
-        return node;
-
-      var firstChar = word[0];
-
-      if (node.Children.TryGetValue(firstChar, out var child))
-      {
-        return GetNodeRecursively(child, word[1..]);
-      }
-      else
-      {
-        return null;
-      }
-    }
-
-    return GetNodeRecursively(_root, word);
+    current.IsCompleted = true;
   }
 
   public bool Contains(string word)
   {
-    static bool ContainsRecursively(Node node, string w)
+    var current = root;
+
+    foreach (var c in word)
     {
-      if (string.IsNullOrEmpty(w))
-      {
-        return node.IsComplete;
-      }
-
-      var firstChar = w[0];
-
-      if (node.Children.TryGetValue(firstChar, out var child))
-      {
-        return ContainsRecursively(child, w[1..]);
-      }
-      else
-      {
+      if (!current.Edges.TryGetValue(c, out var value))
         return false;
-      }
+
+      current = value;
     }
 
-    return ContainsRecursively(_root, word);
+    return current.IsCompleted;
+  }
+
+  private IEnumerable<string> GetWords(Node node, string prefix)
+  {
+    if (node.IsCompleted)
+      yield return prefix;
+
+    foreach (var edge in node.Edges)
+    {
+      foreach (var word in GetWords(edge.Value, prefix + edge.Key))
+      {
+        yield return word;
+      }
+    }
   }
 
   public IEnumerable<string> Search(string prefix)
   {
-    if (string.IsNullOrEmpty(prefix))
-      throw new ArgumentException("Prefix cannot be null or empty.", nameof(prefix));
+    var current = root;
 
-    var node = GetNode(prefix);
-
-    if (node is null)
-      return [];
-
-    static void SearchRecursively(Node node, string word, in List<string> results)
+    foreach (var c in prefix)
     {
-      if(node.IsComplete)
-      {
-        results.Add(word);
-      }
+      if (!current.Edges.TryGetValue(c, out var value))
+        yield break;
 
-      foreach (var (c, child) in node.Children)
-      {
-        SearchRecursively(child, word + c, results);
-      }
+      current = value;
     }
 
-    var results = new List<string>();
-
-    SearchRecursively(node, prefix, results);
-
-    return results;
+    foreach (var word in GetWords(current, prefix))
+    {
+      yield return word;
+    }
   }
 
   public sealed class Node(char value)
   {
     public char Value => value;
-    public bool IsComplete { get; set; }
-    public Dictionary<char, Node> Children { get; set; } = new();
+    public bool IsCompleted { get; set; }
+    public Dictionary<char, Node> Edges { get; set; } = new();
   }
 }
