@@ -144,10 +144,14 @@ public sealed class BinarySearchTree<T> where T : IComparable<T>
         else
         {
           var minNode = GetMinRecursively(node.Right!);
+
+          var rightNode = node.Right;
+          RemoveRecursively(ref rightNode, minNode.Value);
+
           node = new Node(minNode.Value)
           {
             Left = node.Left,
-            Right = null
+            Right = rightNode
           };
           return true;
         }
