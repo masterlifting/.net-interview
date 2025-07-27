@@ -92,7 +92,7 @@ public sealed class Graph<T> where T : IComparable<T>
 
       Vertices.Add(vertex);
 
-      if (!vertex.Vertices.Any(v => v.Value.Equals(this.Value)))
+      if (!vertex.Vertices.Any(v => v.Value.Equals(Value)))
         vertex.Vertices.Add(this);
     }
 
