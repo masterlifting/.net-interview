@@ -2,77 +2,77 @@ namespace Algorithm;
 
 public sealed class Trie
 {
-  private readonly Node root = new('\0');
+    private readonly Node root = new('\0');
 
-  public void Add(string word)
-  {
-    if (word.Length == 0)
-      return;
-
-    var current = root;
-
-    foreach (var c in word)
+    public void Add(string word)
     {
-      if (!current.Edges.ContainsKey(c))
-        current.Edges[c] = new(c);
+        if (word.Length == 0)
+            return;
 
-      current = current.Edges[c];
+        var current = root;
+
+        foreach (var c in word)
+        {
+            if (!current.Edges.ContainsKey(c))
+                current.Edges[c] = new(c);
+
+            current = current.Edges[c];
+        }
+
+        current.IsWord = true;
     }
 
-    current.IsWord = true;
-  }
-
-  public bool Contains(string word)
-  {
-    var current = root;
-
-    foreach (var c in word)
+    public bool Contains(string word)
     {
-      if (!current.Edges.TryGetValue(c, out var value))
-        return false;
+        var current = root;
 
-      current = value;
+        foreach (var c in word)
+        {
+            if (!current.Edges.TryGetValue(c, out var value))
+                return false;
+
+            current = value;
+        }
+
+        return current.IsWord;
     }
 
-    return current.IsWord;
-  }
-
-  private IEnumerable<string> GetWords(Node node, string prefix)
-  {
-    if (node.IsWord)
-      yield return prefix;
-
-    foreach (var edge in node.Edges)
+    private IEnumerable<string> GetWords(Node node, string prefix)
     {
-      foreach (var word in GetWords(edge.Value, prefix + edge.Key))
-      {
-        yield return word;
-      }
-    }
-  }
+        if (node.IsWord)
+            yield return prefix;
 
-  public IEnumerable<string> Search(string prefix)
-  {
-    var current = root;
-
-    foreach (var c in prefix)
-    {
-      if (!current.Edges.TryGetValue(c, out var value))
-        yield break;
-
-      current = value;
+        foreach (var edge in node.Edges)
+        {
+            foreach (var word in GetWords(edge.Value, prefix + edge.Key))
+            {
+                yield return word;
+            }
+        }
     }
 
-    foreach (var word in GetWords(current, prefix))
+    public IEnumerable<string> Search(string prefix)
     {
-      yield return word;
-    }
-  }
+        var current = root;
 
-  public sealed class Node(char value)
-  {
-    public char Value => value;
-    public bool IsWord { get; set; }
-    public Dictionary<char, Node> Edges { get; set; } = [];
-  }
+        foreach (var c in prefix)
+        {
+            if (!current.Edges.TryGetValue(c, out var value))
+                yield break;
+
+            current = value;
+        }
+
+        foreach (var word in GetWords(current, prefix))
+        {
+            yield return word;
+        }
+    }
+
+    public sealed class Node(char value)
+    {
+        public char Value => value;
+        public bool IsWord { get; set; }
+        public Dictionary<char, Node> Edges { get; set; } = [];
+    }
 }

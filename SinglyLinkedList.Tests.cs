@@ -39,7 +39,7 @@ public class SinglyLinkedListTests
         list.Add(5);
         list.Add(10);
         list.Add(15);
-        
+
         Assert.Equal(15, list.Get(0));
         Assert.Equal(10, list.Get(1));
         Assert.Equal(5, list.Get(2));

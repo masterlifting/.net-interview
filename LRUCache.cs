@@ -12,7 +12,7 @@ public class LRUCache<K, V>(int capacity) where K : notnull
         {
             list.Remove(node);
             list.AddLast(node);
-            return  node.Value.Value;
+            return node.Value.Value;
         }
 
         return default;
