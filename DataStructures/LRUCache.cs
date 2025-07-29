@@ -8,21 +8,19 @@ public class LRUCache<K, V>(int capacity) where K : notnull
 
     public V? Get(K key)
     {
-        if (cache.TryGetValue(key, out var node))
-        {
-            list.Remove(node);
-            list.AddLast(node);
-            return node.Value.Value;
-        }
+        if (!cache.TryGetValue(key, out var node))
+            return default;
 
-        return default;
+        list.Remove(node);
+        list.AddLast(node);
+        return node.Value.Value;
     }
 
     public void Set(K key, V value)
     {
-        if (cache.TryGetValue(key, out var existingNode))
+        if (cache.TryGetValue(key, out var existing))
         {
-            list.Remove(existingNode);
+            list.Remove(existing);
         }
         else if (cache.Count >= _capacity)
         {
