@@ -138,13 +138,8 @@ public sealed class Graph<T> where T : IComparable<T>
         yield return current;
 
         foreach (var vertex in current.Vertices)
-        {
-          if (!visited.Contains(vertex))
-          {
-            visited.Add(vertex);
+          if (visited.Add(vertex))
             queue.Enqueue(vertex);
-          }
-        }
       }
     }
   }

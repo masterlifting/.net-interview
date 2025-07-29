@@ -10,16 +10,15 @@ public class LRUCache<K, V>(int capacity) where K : notnull
     {
         if (cache.TryGetValue(key, out var node))
         {
-            var value = node.Value.Value;
             list.Remove(node);
             list.AddLast(node);
-            return value;
+            return  node.Value.Value;
         }
 
         return default;
     }
 
-    public void Set(K key, V val)
+    public void Set(K key, V value)
     {
         if (cache.TryGetValue(key, out var existingNode))
         {
@@ -27,27 +26,14 @@ public class LRUCache<K, V>(int capacity) where K : notnull
         }
         else if (cache.Count >= _capacity)
         {
-            RemoveFirst();
+            cache.Remove(list.First!.Value.Key);
+            list.RemoveFirst();
         }
 
-        CacheItem cacheItem = new(key, val);
-        LinkedListNode<CacheItem> node = new(cacheItem);
+        LinkedListNode<CacheItem> node = new(new(key, value));
 
         list.AddLast(node);
         cache[key] = node;
-    }
-
-    private void RemoveFirst()
-    {
-        if (list.First is null)
-            throw new InvalidOperationException("Cache is empty, cannot remove item.");
-
-        var node = list.First;
-
-        // Remove from LRUPriority
-        list.RemoveFirst();
-        // Remove from cache
-        cache.Remove(node.Value.Key);
     }
 
     record CacheItem(K Key, V Value);

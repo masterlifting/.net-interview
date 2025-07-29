@@ -56,13 +56,6 @@ public sealed class SinglyLinkedList<T>
     var current = _head;
     var index = 0;
 
-    if(_head.Value!.Equals(value))
-    {
-      _head = _head.Next;
-      Count--;
-      return true;
-    }
-
     while (current is not null)
     {
       if(current.Value!.Equals(value))

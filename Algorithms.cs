@@ -280,21 +280,12 @@ public static class Algorithms
         return dict.All(x => x.Value == 0);
     }
 
-    private class Interval : IComparable<Interval>
+    private class Interval(int start, int end) : IComparable<Interval>
     {
-        public int Start { get; }
-        public int End { get; }
+        public int Start => start;
+        public int End => end;
 
-        public Interval(int start, int end)
-        {
-            Start = start;
-            End = end;
-        }
-
-        public int CompareTo(Interval? other)
-        {
-            return Start - other?.Start ?? 0;
-        }
+        public int CompareTo(Interval? other) => Start - other?.Start ?? 0;
     }
 
     public static int[][] MergeIntervals(int[][] intervals)
@@ -339,9 +330,9 @@ public static class Algorithms
         {
             var v = target - nums[i];
 
-            if (dict.ContainsKey(v))
+            if (dict.TryGetValue(v, out int value))
             {
-                return [dict[v], i];
+                return [value, i];
             }
             else
             {
@@ -368,11 +359,11 @@ public static class Algorithms
             }
             else
             {
-                cache[orderedStr] = new List<string> { str };
+                cache[orderedStr] = [str];
             }
         }
 
-        return cache.Values.ToList();
+        return [.. cache.Values];
     }
 
     public static bool BackspaceCompare(string s, string t)
