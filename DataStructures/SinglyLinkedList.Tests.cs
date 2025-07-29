@@ -1,4 +1,4 @@
-namespace Algorithm.Tests;
+namespace DataStructure.Tests;
 
 public class SinglyLinkedListTests
 {

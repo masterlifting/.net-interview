@@ -1,4 +1,4 @@
-namespace Algorithm;
+namespace DataStructure;
 
 public class LRUCache<K, V>(int capacity) where K : notnull
 {

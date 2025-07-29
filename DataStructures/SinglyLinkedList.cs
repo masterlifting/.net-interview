@@ -1,4 +1,4 @@
-namespace Algorithm;
+namespace DataStructure;
 
 public sealed class SinglyLinkedList<T>
 {
