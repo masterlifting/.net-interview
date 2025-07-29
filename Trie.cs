@@ -2,7 +2,7 @@ namespace Algorithm;
 
 public sealed class Trie
 {
-  private Node root = new('\0');
+  private readonly Node root = new('\0');
 
   public void Add(string word)
   {
@@ -19,7 +19,7 @@ public sealed class Trie
       current = current.Edges[c];
     }
 
-    current.IsCompleted = true;
+    current.IsWord = true;
   }
 
   public bool Contains(string word)
@@ -34,12 +34,12 @@ public sealed class Trie
       current = value;
     }
 
-    return current.IsCompleted;
+    return current.IsWord;
   }
 
   private IEnumerable<string> GetWords(Node node, string prefix)
   {
-    if (node.IsCompleted)
+    if (node.IsWord)
       yield return prefix;
 
     foreach (var edge in node.Edges)
@@ -72,7 +72,7 @@ public sealed class Trie
   public sealed class Node(char value)
   {
     public char Value => value;
-    public bool IsCompleted { get; set; }
-    public Dictionary<char, Node> Edges { get; set; } = new();
+    public bool IsWord { get; set; }
+    public Dictionary<char, Node> Edges { get; set; } = [];
   }
 }

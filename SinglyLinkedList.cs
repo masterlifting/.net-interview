@@ -55,10 +55,10 @@ public sealed class SinglyLinkedList<T>
 
     var current = _head;
     var index = 0;
-
+    
     while (current is not null)
     {
-      if(current.Value!.Equals(value))
+      if (current.Value!.Equals(value))
         break;
 
       current = current.Next;
